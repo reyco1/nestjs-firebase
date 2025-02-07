@@ -1,0 +1,33 @@
+{
+  "name": "@reyco1/nestjs-firebase",
+  "version": "0.0.1",
+  "description": "Firebase integration module for NestJS including authentication and Firestore",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "firebase",
+    "authentication",
+    "firestore",
+    "guard"
+  ],
+  "author": "reyco1",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.9.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@nestjs/common": "^11.0.8",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.8",
+    "firebase-admin": "^13.1.0"
+  }
+}
