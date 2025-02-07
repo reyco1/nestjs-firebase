@@ -203,10 +203,10 @@ The package throws standard NestJS exceptions:
 
 This package is written in TypeScript and includes type definitions. No additional `@types` packages are required.
 
-## License
+## License 📄
 
 MIT
 
-## Author
+---
 
-reyco1
+Made with ❤️ by Reyco1
