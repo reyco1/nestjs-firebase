@@ -33,6 +33,7 @@ firebase-adminsdk.json
 # System Files
 .DS_Store
 Thumbs.db
+._*
 
 # Logs
 logs
