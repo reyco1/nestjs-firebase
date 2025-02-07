@@ -1,10 +1,12 @@
 {
   "name": "@reyco1/nestjs-firebase",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Firebase integration module for NestJS including authentication and Firestore",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/reyco1/nestjs-firebase.git",
+  "bugs": "https://github.com/reyco1/nestjs-firebase/issues",
+  "homepage": "https://github.com/reyco1/nestjs-firebase#readme",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
