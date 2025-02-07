@@ -4,6 +4,7 @@
   "description": "Firebase integration module for NestJS including authentication and Firestore",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": "https://github.com/reyco1/nestjs-firebase.git",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
