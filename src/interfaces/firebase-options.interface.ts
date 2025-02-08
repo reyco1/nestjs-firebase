@@ -1,7 +1,7 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
 
 export interface FirebaseModuleOptions {
-  serviceAccountPath: string;
+  serviceAccountPath: string | undefined;
 }
 
 export interface FirebaseOptionsFactory {
