@@ -5,6 +5,8 @@ import { Auth } from 'firebase-admin/auth';
 import { Firestore } from 'firebase-admin/firestore';
 import { FirebaseModuleOptions } from '../interfaces/firebase-options.interface';
 import { FIREBASE_OPTIONS } from '../firebase.constants';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
@@ -17,7 +19,13 @@ export class FirebaseService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    const serviceAccount = require(this.options.serviceAccountPath);
+    if (!this.options?.serviceAccountPath) {
+      throw new Error('Firebase service account path is required. Please provide it in the module options.');
+    }
+
+    const serviceAccount = JSON.parse(
+      readFileSync(join(process.cwd(), this.options.serviceAccountPath), 'utf-8')
+    );
     
     this.firebaseApp = admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
