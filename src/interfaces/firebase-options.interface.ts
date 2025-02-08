@@ -1,7 +1,8 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
+import { Credential } from 'firebase-admin/app';
 
 export interface FirebaseModuleOptions {
-  serviceAccountPath: string | undefined;
+  serviceAccountPath: string | Credential | undefined;
 }
 
 export interface FirebaseOptionsFactory {

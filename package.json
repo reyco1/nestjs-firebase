@@ -1,6 +1,6 @@
 {
   "name": "@reyco1/nestjs-firebase",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Firebase integration module for NestJS including authentication and Firestore",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

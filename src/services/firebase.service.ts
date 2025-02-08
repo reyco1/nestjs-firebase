@@ -21,33 +21,48 @@ export class FirebaseService implements OnModuleInit {
   async onModuleInit() {
     if (!this.options?.serviceAccountPath) {
       throw new Error(
-        'Firebase service account path is required but was not provided. ' +
+        'Firebase service account path or credential is required but was not provided. ' +
         'Please check that your environment variable FIREBASE_SERVICE_ACCOUNT_PATH is set ' +
-        'and that the ConfigService is properly injected.'
+        'or that a valid credential was provided, and that the ConfigService is properly injected.'
       );
     }
 
-    let serviceAccountPath = this.options.serviceAccountPath;
-    if (!isAbsolute(serviceAccountPath)) {
-      const oldPath = serviceAccountPath;
-      serviceAccountPath = join(process.cwd(), serviceAccountPath);
-    }
+    let credential: admin.credential.Credential;
 
-    if (!existsSync(serviceAccountPath)) {
-      throw new Error(
-        `Firebase service account file not found at '${serviceAccountPath}'. ` +
-        `Working directory is '${process.cwd()}'. ` +
-        'Please ensure the file exists and the path is correct.'
-      );
+    if (typeof this.options.serviceAccountPath === 'string') {
+      let serviceAccountPath = this.options.serviceAccountPath;
+      if (!isAbsolute(serviceAccountPath)) {
+        serviceAccountPath = join(process.cwd(), serviceAccountPath);
+      }
+
+      if (!existsSync(serviceAccountPath)) {
+        throw new Error(
+          `Firebase service account file not found at '${serviceAccountPath}'. ` +
+          `Working directory is '${process.cwd()}'. ` +
+          'Please ensure the file exists and the path is correct.'
+        );
+      }
+
+      try {
+        const serviceAccount = JSON.parse(
+          readFileSync(serviceAccountPath, 'utf-8')
+        );
+        credential = admin.credential.cert(serviceAccount);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        throw new Error(
+          `Failed to initialize Firebase: Could not process service account file at '${serviceAccountPath}'. ` +
+          `Error: ${errorMessage}`
+        );
+      }
+    } else {
+      // If serviceAccountPath is already a Credential instance
+      credential = this.options.serviceAccountPath;
     }
 
     try {
-      const serviceAccount = JSON.parse(
-        readFileSync(serviceAccountPath, 'utf-8')
-      );
-      
       this.firebaseApp = admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
+        credential
       });
 
       this.firebaseAuth = admin.auth(this.firebaseApp);
@@ -55,8 +70,7 @@ export class FirebaseService implements OnModuleInit {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(
-        `Failed to initialize Firebase: Could not process service account file at '${serviceAccountPath}'. ` +
-        `Error: ${errorMessage}`
+        `Failed to initialize Firebase: ${errorMessage}`
       );
     }
   }
