@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { App } from 'firebase-admin/app';
 import { Auth } from 'firebase-admin/auth';
@@ -10,7 +10,6 @@ import { join, isAbsolute } from 'path';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
-  private readonly logger = new Logger(FirebaseService.name);
   private firebaseApp: App;
   private firebaseAuth: Auth;
   private firebaseFirestore: Firestore;
@@ -20,8 +19,6 @@ export class FirebaseService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    this.logger.debug(`Initializing Firebase with options: ${JSON.stringify(this.options, null, 2)}`);
-    
     if (!this.options?.serviceAccountPath) {
       throw new Error(
         'Firebase service account path is required but was not provided. ' +
@@ -34,7 +31,6 @@ export class FirebaseService implements OnModuleInit {
     if (!isAbsolute(serviceAccountPath)) {
       const oldPath = serviceAccountPath;
       serviceAccountPath = join(process.cwd(), serviceAccountPath);
-      this.logger.debug(`Converting relative path '${oldPath}' to absolute path: '${serviceAccountPath}'`);
     }
 
     if (!existsSync(serviceAccountPath)) {
@@ -56,8 +52,6 @@ export class FirebaseService implements OnModuleInit {
 
       this.firebaseAuth = admin.auth(this.firebaseApp);
       this.firebaseFirestore = admin.firestore(this.firebaseApp);
-      
-      this.logger.log('Firebase initialized successfully');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(
